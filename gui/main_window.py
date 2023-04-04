@@ -398,40 +398,6 @@ class MainWindow(QMainWindow):
 
             self.statusBar().showMessage(f'Link set "{name}" was created.')
 
-    """
-    def certain_time(self):
-
-        # Create the Historic checkbox
-        #self.historic_checkbox = QtWidgets.QCheckBox("Historic", self)
-        self.radio_historic.stateChanged.connect(self.on_historic_toggled)
-
-        # Create the Realtime checkbox
-        #self.realtime_checkbox = QtWidgets.QCheckBox("Realtime", self)
-        self.radio_realtime.stateChanged.connect(self.on_realtime_toggled)
-
-        # Set up the Past min QDateTimeEdit widget
-        #self.past_min_edit = QtWidgets.QDateTimeEdit(self)
-        self.combo_realtime_box.setDateTime(QComboBox.currentDateTime().addSecs(-300))
-        #self.combo_realtime_box.setDisplayFormat("dd.MM.yyyy HH:mm:ss")
-        self.combo_realtime_box.setVisible(False)
-
-    def on_historic_toggled(self):
-        if self.radio_historic:
-            self.datetime_start.setVisible(True)
-            self.datetime_stop.setVisible(True)
-        else:
-            self.datetime_start.setVisible(False)
-            self.datetime_stop.setVisible(False)
-
-    def on_realtime_toggled(self):
-        if self.radio_realtime:
-            self.datetime_start.setVisible(False)
-            self.datetime_stop.setVisible(False)
-            self.combo_realtime_box.setVisible(True)
-        else:
-            self.combo_realtime_box.setVisible(False)
-        """
-
     def edit_linkset_fired(self):
         sel_name = self.lists.currentItem().text()
         dialog = SelectionDialog(self, self.current_selection, self.links)
