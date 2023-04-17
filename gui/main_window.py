@@ -5,7 +5,7 @@ from PyQt6.QtCore import QTimer
 from PyQt6.QtGui import QPixmap, QAction
 from PyQt6.QtWidgets import QMainWindow, QLabel, QProgressBar, QHBoxLayout, QWidget, QTextEdit, QListWidget, \
     QDateTimeEdit, QPushButton, QSpinBox, QTabWidget, QLineEdit, QDoubleSpinBox, QRadioButton, QCheckBox, \
-    QListWidgetItem, QTableWidget, QGridLayout, QMessageBox, QFileDialog, QApplication, QComboBox
+    QListWidgetItem, QTableWidget, QGridLayout, QMessageBox, QFileDialog, QApplication
 
 import input.influx_manager as influx
 import input.sqlite_manager as sqlite
@@ -99,13 +99,6 @@ class MainWindow(QMainWindow):
         self.check_dummy = self.findChild(QCheckBox, "checkDummy")
         self.spin_waa_schleiss_val = self.findChild(QDoubleSpinBox, "spinSchleissWaa")
         self.spin_waa_schleiss_tau = self.findChild(QDoubleSpinBox, "spinSchleissTau")
-        self.is_correlation_box = self.findChild(QCheckBox, "isCorrelationBox")
-        self.correlation_spin = self.findChild(QDoubleSpinBox, "correlationSpin")
-        self.combo_realtime_box = self.findChild(QComboBox, "comboRealtime")
-        self.combo_realtime_box.setHidden(True)
-        self.radio_realtime = self.findChild(QRadioButton, "radioRealtime")
-        self.radio_historic = self.findChild(QRadioButton, "radioTimeint")
-
 
         # declare dictionary for created tabs with calculation results
         # <key: int = result ID, value: ResultsWidget>
@@ -305,11 +298,6 @@ class MainWindow(QMainWindow):
         waa_schleiss_val = self.spin_waa_schleiss_val.value()
         waa_schleiss_tau = self.spin_waa_schleiss_tau.value()
         close_func = self.close_tab_result
-        is_correlation = self.is_correlation_box.isChecked()
-        spin_correlation = self.correlation_spin.value()
-        realtime_time = self.combo_realtime_box.dateTime()
-        is_realtime = self.radio_realtime.isChecked()
-        is_historic = self.radio_historic.isChecked()
 
         # INPUT CHECKS:
         if time_diff < 0:   # if timediff is less than 1 hour (in msecs)
@@ -339,8 +327,7 @@ class MainWindow(QMainWindow):
             calculation = calc.Calculation(self.calc_signals, self.result_id, self.links, self.current_selection, start,
                                            end, step, rolling_values, output_step, is_only_overall, is_output_total,
                                            wet_dry_deviation, baseline_samples, interpol_res, idw_power, idw_near,
-                                           idw_dist, waa_schleiss_val, waa_schleiss_tau, is_correlation, spin_correlation,
-                                           realtime_time, is_realtime, is_historic)
+                                           idw_dist, waa_schleiss_val, waa_schleiss_tau)
 
             if self.results_name.text() == "":
                 results_tab_name = "<no name>"
@@ -370,8 +357,8 @@ class MainWindow(QMainWindow):
             self.butt_start.setEnabled(False)
 
             # RUN calculation on worker thread from threadpool
-            #self.threadpool.start(calculation)
-            calculation.run()  # TEMP: run directly on gui thread for debugging reasons
+            self.threadpool.start(calculation)
+            # calculation.run()  # TEMP: run directly on gui thread for debugging reasons
 
             msg = "Processing..."
 
